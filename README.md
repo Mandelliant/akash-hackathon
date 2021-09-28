@@ -38,7 +38,7 @@ You can check that your AKT are in your account by running `akash query bank bal
 
 <h1>Step 2: Configure mail server</h1>
 
-You can use a Handshake domain with hmail, a Handshake email client, to set up a basic Discourse instance. Discourse also [recommends a few options](https://medium.com/r/?url=https%3A%2F%2Fgithub.com%2Fdiscourse%2Fdiscourse%2Fblob%2Fmain%2Fdocs%2FINSTALL-email.md) or you can set up your own mail server.
+You can use a Handshake domain with hmail, a Handshake email client, to set up a basic Discourse instance. Discourse also [recommends a few options](https://medium.com/r/?url=https%3A%2F%2Fgithub.com%2Fdiscourse%2Fdiscourse%2Fblob%2Fmain%2Fdocs%2FINSTALL-email.md) or you can set up your own mail server. For Discourse mail deliverability, you **must** be able to add valid SPF and DKIM records in your DNS.
 
 Once you have a mail server set up, get the following information and save it for later when installing Discourse:
 
@@ -60,3 +60,27 @@ Use the method of your choice to get a name. After Discourse is installed, you n
 
 Open a new command line tool window by right-clicking and selecting Run as administrator, then clone the official Discourse Docker image into `/var/discourse`: `> git clone https://github.com/discourse/discourse_docker.git /var/discourse
 cd /var/discourse`
+
+
+**Note:** you will need to be root through the rest of the setup and bootstrap process so run Discourse related commands in your CLI window with admin privileges.
+
+
+<h1>Step 5: Create your Akash deployment</h1>
+
+With Docker Desktop open, navigate into the newly downloaded Discourse image and open the Dockerfile in `/var/discourse/image/base`.
+
+Run `docker build --tag yourName .` to build the Discourse Docker image from the Dockerfile. Alternatively, you can download the image from [Docker Hub](https://medium.com/r/?url=https%3A%2F%2Fhub.docker.com%2Fr%2Fdiscourse%2Fbase%2Ftags%3Fpage%3D1%26ordering%3Dlast_updated). If you're using Docker Desktop, make sure the image is in use by clicking `Run`.
+
+<h2>Modifying the deploy.yaml file</h2>
+
+I'm still working through this part.
+
+Need to use Akash SDL to determine what specifications to include in the `deploy.yaml` file when deploying to Akash. Discourse needs to be bootstrapped once deployed to a cloud instance, including answering user prompts to configure the download. For setup, Discourse also requires you to create a DNS A record for your server's hostname in your DNS manager pointing to the IP address of the cloud instance where you're installing Discourse (which can't be obtained until you've successfully deployed to the Akash network).
+
+**Next steps**
+* Set Discourse config values as env variables in `deploy.yaml`
+* Set commands in `deploy.yaml` to map variables to corresponding Discourse config prompts
+* Test deployment until manifest successfully uploaded to provider and can deploy
+* Get provider IP address & add A record to DNS settings for the domain
+
+Once the `deploy.yaml` file is correct and I can successfully complete bootstrapping, the Discourse server should be accessible through a web browser via the Handshake domain name used during configuration.
